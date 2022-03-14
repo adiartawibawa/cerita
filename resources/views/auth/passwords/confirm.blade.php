@@ -1,49 +1,60 @@
-@extends('layouts.app')
+@extends('layouts.guest')
 
-@section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Confirm Password') }}</div>
+@section('title', 'Confirm your password')
 
-                <div class="card-body">
-                    {{ __('Please confirm your password before continuing.') }}
+@section('body')
+    <div>
+        <div class="sm:mx-auto sm:w-full sm:max-w-md">
+            <a href="{{ route('home') }}">
+                <x-logo class="w-auto h-16 mx-auto text-indigo-600" />
+            </a>
 
-                    <form method="POST" action="{{ route('password.confirm') }}">
-                        @csrf
+            <h2 class="mt-6 text-3xl font-extrabold text-center text-gray-900 leading-9">
+                Confirm your password
+            </h2>
+            <p class="mt-2 text-sm text-center text-gray-600 leading-5 max-w">
+                Please confirm your password before continuing
+            </p>
+        </div>
 
-                        <div class="form-group row">
-                            <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
+        <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+            <div class="px-4 py-8 bg-white shadow sm:rounded-lg sm:px-10">
+                <form wire:submit.prevent="confirm">
+                    <div>
+                        <label for="password" class="block text-sm font-medium text-gray-700 leading-5">
+                            Password
+                        </label>
 
-                            <div class="col-md-6">
-                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
-
-                                @error('password')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
+                        <div class="mt-1 rounded-md shadow-sm">
+                            <input wire:model.lazy="password" id="password" name="password" type="password" required
+                                autofocus
+                                class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5 @error('password') border-red-300 text-red-900 placeholder-red-300 focus:border-red-300 focus:ring-red @enderror" />
                         </div>
 
-                        <div class="form-group row mb-0">
-                            <div class="col-md-8 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
-                                    {{ __('Confirm Password') }}
-                                </button>
+                        @error('password')
+                            <p class="mt-2 text-sm text-red-600" id="password-error">{{ $message }}</p>
+                        @enderror
+                    </div>
 
-                                @if (Route::has('password.request'))
-                                    <a class="btn btn-link" href="{{ route('password.request') }}">
-                                        {{ __('Forgot Your Password?') }}
-                                    </a>
-                                @endif
-                            </div>
+                    <div class="flex items-center justify-end mt-6">
+                        <div class="text-sm leading-5">
+                            <a href="{{ route('password.request') }}"
+                                class="font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:underline transition ease-in-out duration-150">
+                                Forgot your password?
+                            </a>
                         </div>
-                    </form>
-                </div>
+                    </div>
+
+                    <div class="mt-6">
+                        <span class="block w-full rounded-md shadow-sm">
+                            <button type="submit"
+                                class="flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:ring-indigo active:bg-indigo-700 transition duration-150 ease-in-out">
+                                Confirm password
+                            </button>
+                        </span>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
-</div>
 @endsection

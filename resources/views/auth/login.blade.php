@@ -1,90 +1,88 @@
 @extends('layouts.guest')
 
-@section('content')
-    <section class="section">
-        <div class="d-flex flex-wrap align-items-stretch">
-            <div class="col-lg-4 col-md-6 col-12 order-lg-1 min-vh-100 order-2 bg-white">
-                <div class="p-4 m-3">
-                    <img src="../assets/img/stisla-fill.svg" alt="logo" width="80"
-                        class="shadow-light rounded-circle mb-5 mt-2">
-                    <h4 class="text-dark font-weight-normal">Welcome to <span
-                            class="font-weight-bold">{{ config('app.name') }}</span></h4>
-                    <p class="text-muted">Before you get started, you must login.</p>
+@section('title', 'Sign in to your account')
 
-                    @if (session('status'))
-                        <div class="mb-4 font-medium text-sm text-green-600">
-                            {{ session('status') }}
-                        </div>
-                    @endif
+@section('body')
+    <div>
+        <div class="sm:mx-auto sm:w-full sm:max-w-md">
+            <a href="{{ route('home') }}">
+                <x-logo class="w-auto h-16 mx-auto text-indigo-600" />
+            </a>
 
-                    <form method="POST" action="{{ route('login') }}" class="needs-validation" novalidate="">
-                        @csrf
+            <h2 class="mt-6 text-3xl font-extrabold text-center text-gray-900 leading-9">
+                Sign in to your account
+            </h2>
+            @if (Route::has('register'))
+                <p class="mt-2 text-sm text-center text-gray-600 leading-5 max-w">
+                    Or
+                    <a href="{{ route('register') }}"
+                        class="font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:underline transition ease-in-out duration-150">
+                        create a new account
+                    </a>
+                </p>
+            @endif
+        </div>
 
-                        <div class="form-group">
-                            <label for="email">{{ __('Email or Username') }}</label>
-                            <input id="email" type="text" class="form-control" name="email" tabindex="1"
-                                :value="old('email')" required autofocus>
-                            <div class="invalid-feedback">
-                                Please fill in your email or username
-                            </div>
-                        </div>
+        <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+            <div class="px-4 py-8 bg-white shadow sm:rounded-lg sm:px-10">
+                <form wire:submit.prevent="authenticate">
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700 leading-5">
+                            Email address
+                        </label>
 
-                        <div class="form-group">
-                            <div class="d-block">
-                                <label for="password" class="control-label">{{ __('Password') }}</label>
-                            </div>
-                            <input id="password" type="password" class="form-control" name="password" tabindex="2"
-                                required autocomplete="current-password">
-                            <div class="invalid-feedback">
-                                please fill in your password
-                            </div>
+                        <div class="mt-1 rounded-md shadow-sm">
+                            <input wire:model.lazy="email" id="email" name="email" type="email" required autofocus
+                                class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5 @error('email') border-red-300 text-red-900 placeholder-red-300 focus:border-red-300 focus:ring-red @enderror" />
                         </div>
 
-                        <div class="form-group">
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" name="remember" class="custom-control-input" tabindex="3"
-                                    id="remember_me">
-                                <label class="custom-control-label" for="remember_me">{{ __('Remember me') }}</label>
-                            </div>
+                        @error('email')
+                            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div class="mt-6">
+                        <label for="password" class="block text-sm font-medium text-gray-700 leading-5">
+                            Password
+                        </label>
+
+                        <div class="mt-1 rounded-md shadow-sm">
+                            <input wire:model.lazy="password" id="password" type="password" required
+                                class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5 @error('password') border-red-300 text-red-900 placeholder-red-300 focus:border-red-300 focus:ring-red @enderror" />
                         </div>
 
-                        <div class="form-group text-right">
-                            @if (Route::has('password.request'))
-                                <a class="float-left mt-3" href="{{ route('password.request') }}">
-                                    {{ __('Forgot your password?') }}
-                                </a>
-                            @endif
+                        @error('password')
+                            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
 
-                            <button type="submit" class="btn btn-primary btn-lg btn-icon icon-right" tabindex="4">
-                                {{ __('Log in') }}
+                    <div class="flex items-center justify-between mt-6">
+                        <div class="flex items-center">
+                            <input wire:model.lazy="remember" id="remember" type="checkbox"
+                                class="form-checkbox w-4 h-4 text-indigo-600 transition duration-150 ease-in-out" />
+                            <label for="remember" class="block ml-2 text-sm text-gray-900 leading-5">
+                                Remember
+                            </label>
+                        </div>
+
+                        <div class="text-sm leading-5">
+                            <a href="{{ route('password.request') }}"
+                                class="font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:underline transition ease-in-out duration-150">
+                                Forgot your password?
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="mt-6">
+                        <span class="block w-full rounded-md shadow-sm">
+                            <button type="submit"
+                                class="flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:ring-indigo active:bg-indigo-700 transition duration-150 ease-in-out">
+                                Sign in
                             </button>
-                        </div>
-
-                        <div class="mt-5 text-center">
-                            Don't have an account? <a href="{{ route('register') }}">Create new one</a>
-                        </div>
-                    </form>
-
-                    <div class="text-center mt-5 text-small">
-                        Copyright &copy; {{ config('app.name') }}. Made with 💙 by {{ config('app.creator') }}
+                        </span>
                     </div>
-                </div>
-            </div>
-            <div class="col-lg-8 col-12 order-lg-2 order-1 min-vh-100 background-walk-y position-relative overlay-gradient-bottom"
-                data-background="{{ asset('./img/login.jpg') }}">
-                <div class="absolute-bottom-left index-2">
-                    <div class="text-light p-5 pb-2">
-                        <div class="mb-5 pb-3">
-                            <h1 class="mb-2 display-4 font-weight-bold">Welcome back, my friend!</h1>
-                            <h5 class="font-weight-normal text-muted-transparent">Bali, Indonesia</h5>
-                        </div>
-                        Photo by <a class="text-light bb" target="_blank"
-                            href="https://unsplash.com/photos/1kdIG_258bU">Aron Visuals</a> on <a class="text-light bb"
-                            target="_blank" href="https://unsplash.com">Unsplash</a>
-                    </div>
-                </div>
+                </form>
             </div>
         </div>
-    </section>
-
+    </div>
 @endsection

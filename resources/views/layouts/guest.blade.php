@@ -1,21 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('layouts.base')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    
-    <title>{{ config('app.name') }}</title>
+@section('body')
+    <div class="flex flex-col justify-center min-h-screen py-12 bg-gray-50 sm:px-6 lg:px-8">
+        @yield('content')
 
-    <link rel="stylesheet" href="{{ mix('css/app.css') }}">
-
-    <script src="{{ mix('js/app.js') }}"></script>
-
-</head>
-
-<body>
-
-</body>
-
-</html>
+        @isset($slot)
+            {{ $slot }}
+        @endisset
+    </div>
+@endsection

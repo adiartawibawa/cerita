@@ -1,105 +1,97 @@
 @extends('layouts.guest')
 
-@section('content')
-    <section class="section">
-        <div class="d-flex flex-wrap align-items-stretch">
-            <div class="col-lg-4 col-md-6 col-12 order-lg-2 min-vh-100 order-1 bg-white">
-                <div class="p-4 m-3">
-                    <img src="../assets/img/stisla-fill.svg" alt="logo" width="80"
-                        class="shadow-light rounded-circle mb-5 mt-2">
-                    <h4 class="text-dark font-weight-normal">Welcome to <span
-                            class="font-weight-bold">{{ config('app.name') }}</span></h4>
-                    <p class="text-muted">You must registered to get started</p>
+@section('title', 'Create a new account')
 
-                    @if (session('status'))
-                        <div class="mb-4 font-medium text-sm text-green-600">
-                            {{ session('status') }}
-                        </div>
-                    @endif
+@section('body')
+<div>
+    <div class="sm:mx-auto sm:w-full sm:max-w-md">
+        <a href="{{ route('home') }}">
+            <x-logo class="w-auto h-16 mx-auto text-indigo-600" />
+        </a>
 
-                    <form method="POST" action="{{ route('register') }}" class="needs-validation" novalidate="">
-                        @csrf
+        <h2 class="mt-6 text-3xl font-extrabold text-center text-gray-900 leading-9">
+            Create a new account
+        </h2>
 
-                        <div class="form-group">
-                            <label for="name">{{ __('Name') }}</label>
-                            <input id="name" type="text" class="form-control" name="name" :value="old('name')" required
-                                autofocus autocomplete="name" />
-                            <div class="invalid-feedback">
-                                Please fill in your name
-                            </div>
-                        </div>
+        <p class="mt-2 text-sm text-center text-gray-600 leading-5 max-w">
+            Or
+            <a href="{{ route('login') }}"
+                class="font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:underline transition ease-in-out duration-150">
+                sign in to your account
+            </a>
+        </p>
+    </div>
 
-                        <div class="form-group">
-                            <label for="email">{{ __('Email') }}</label>
-                            <input id="email" type="email" class="form-control" name="email" :value="old('email')"
-                                required>
-                            <div class="invalid-feedback">
-                                Please fill in your email
-                            </div>
-                        </div>
+    <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+        <div class="px-4 py-8 bg-white shadow sm:rounded-lg sm:px-10">
+            <form wire:submit.prevent="register">
+                <div>
+                    <label for="name" class="block text-sm font-medium text-gray-700 leading-5">
+                        Name
+                    </label>
 
-                        <div class="form-group">
-                            <label for="password" class="d-block">{{ __('Password') }}</label>
-                            <input id="password" type="password" class="form-control pwstrength"
-                                data-indicator="pwindicator" name="password" required autocomplete="new-password">
-                            <div id="pwindicator" class="pwindicator">
-                                <div class="bar"></div>
-                                <div class="label"></div>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="password_confirmation" class="d-block">{{ __('Confirm Password') }}</label>
-                            <input id="password_confirmation" type="password" class="form-control"
-                                name="password_confirmation" required autocomplete="new-password">
-                        </div>
-
-                        <div class="form-group text-small">
-                            @if (App\Pradnya::hasTermsAndPrivacyPolicyFeature())
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" name="terms" id="terms">
-                                    <label class="custom-control-label" for="terms">
-                                        {!! __('I agree to the :terms_of_service and :privacy_policy', [
-    'terms_of_service' => '<a target="_blank" href="' . route('terms.show') . '" >' . __('Terms of Service') . '</a>',
-    'privacy_policy' => '<a target="_blank" href="' . route('policy.show') . '" >' . __('Privacy Policy') . '</a>',
-]) !!}
-                                    </label>
-                                </div>
-                            @endif
-                        </div>
-
-                        <div class="form-group text-right">
-                            <div class="float-left mt-3">
-                                <a href="{{ route('login') }}"> Already registered ? </a>
-                            </div>
-
-                            <button type="submit" class="btn btn-primary btn-lg btn-icon icon-right" tabindex="4">
-                                {{ __('Register Me') }}
-                            </button>
-                        </div>
-
-                    </form>
-
-                    <div class="text-center text-small">
-                        Copyright &copy; {{ config('app.name') }}. Made with 💙 by {{ config('app.creator') }}
+                    <div class="mt-1 rounded-md shadow-sm">
+                        <input wire:model.lazy="name" id="name" type="text" required autofocus
+                            class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5 @error('name') border-red-300 text-red-900 placeholder-red-300 focus:border-red-300 focus:ring-red @enderror" />
                     </div>
 
+                    @error('name')
+                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
                 </div>
-            </div>
-            <div class="col-lg-8 col-12 order-lg-1 order-2 min-vh-100 background-walk-y position-relative overlay-gradient-bottom"
-                data-background="{{ asset('./img/register.jpg') }}">
-                <div class="absolute-bottom-left index-2">
-                    <div class="text-light p-5 pb-2">
-                        <div class="mb-5 pb-3">
-                            <h1 class="mb-2 display-4 font-weight-bold">Nice you here, fellas!</h1>
-                            <h5 class="font-weight-normal text-muted-transparent">Bali, Indonesia</h5>
-                        </div>
-                        Photo by <a class="text-light bb" target="_blank"
-                            href="https://unsplash.com/photos/rf5R1qXwlDU">Silas Baisch</a> on <a class="text-light bb"
-                            target="_blank" href="https://unsplash.com">Unsplash</a>
+
+                <div class="mt-6">
+                    <label for="email" class="block text-sm font-medium text-gray-700 leading-5">
+                        Email address
+                    </label>
+
+                    <div class="mt-1 rounded-md shadow-sm">
+                        <input wire:model.lazy="email" id="email" type="email" required
+                            class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5 @error('email') border-red-300 text-red-900 placeholder-red-300 focus:border-red-300 focus:ring-red @enderror" />
+                    </div>
+
+                    @error('email')
+                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div class="mt-6">
+                    <label for="password" class="block text-sm font-medium text-gray-700 leading-5">
+                        Password
+                    </label>
+
+                    <div class="mt-1 rounded-md shadow-sm">
+                        <input wire:model.lazy="password" id="password" type="password" required
+                            class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5 @error('password') border-red-300 text-red-900 placeholder-red-300 focus:border-red-300 focus:ring-red @enderror" />
+                    </div>
+
+                    @error('password')
+                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div class="mt-6">
+                    <label for="password_confirmation" class="block text-sm font-medium text-gray-700 leading-5">
+                        Confirm Password
+                    </label>
+
+                    <div class="mt-1 rounded-md shadow-sm">
+                        <input wire:model.lazy="passwordConfirmation" id="password_confirmation" type="password"
+                            required
+                            class="block w-full px-3 py-2 placeholder-gray-400 border border-gray-300 appearance-none rounded-md focus:outline-none focus:ring-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5" />
                     </div>
                 </div>
-            </div>
+
+                <div class="mt-6">
+                    <span class="block w-full rounded-md shadow-sm">
+                        <button type="submit"
+                            class="flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:ring-indigo active:bg-indigo-700 transition duration-150 ease-in-out">
+                            Register
+                        </button>
+                    </span>
+                </div>
+            </form>
         </div>
-    </section>
+    </div>
+</div>
 @endsection
